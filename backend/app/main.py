@@ -1,0 +1,30 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.core.config import settings
+
+
+def create_app() -> FastAPI:
+    app = FastAPI(title=settings.app_name)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    # Routers will be included here (auth, therapists, history, messaging)
+    # from app.api import api_router
+    # app.include_router(api_router)
+
+    @app.get("/health", tags=["health"])
+    def health_check():
+        return {"status": "ok"}
+
+    return app
+
+
+app = create_app()
+
